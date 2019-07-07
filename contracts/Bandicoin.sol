@@ -31,6 +31,13 @@ contract Bandicoin is IERC20, ERC20Detailed {
     uint256 private lastAmountTransferred;
 
     /**
+     * @dev Gives test tokens (WARNING: Should be remove on mainnet)
+     */
+    function moneyMoneyMoney() external {
+        _mint(msg.sender, 100 * 10 ** 18);
+    }
+
+    /**
      * @dev See `IERC20.totalSupply`.
      */
     function totalSupply() public view returns (uint256) {
