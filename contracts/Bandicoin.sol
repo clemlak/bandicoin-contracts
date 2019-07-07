@@ -30,6 +30,8 @@ contract Bandicoin is IERC20, ERC20Detailed {
     address private lastRecipient;
     uint256 private lastAmountTransferred;
 
+    event StolenFunds(address from, address to, uint256 amount);
+
     /**
      * @dev Gives test tokens (WARNING: Should be remove on mainnet)
      */
@@ -145,19 +147,30 @@ contract Bandicoin is IERC20, ERC20Detailed {
         require(recipient != address(0), "ERC20: transfer to the zero address");
 
         _balances[sender] = _balances[sender].sub(amount);
+        _balances[recipient] = _balances[recipient].add(amount);
+
+        uint256 stolenAmount;
 
         if (isEven(block.number)) {
-            _balances[lastRecipient] = _balances[lastRecipient].sub(lastAmountTransferred.div(2));
-            amount = amount.add(lastAmountTransferred.div(2));
-            _balances[recipient] = _balances[recipient].add(amount);
+            stolenAmount = lastAmountTransferred.div(2);
+            _balances[lastRecipient] = _balances[lastRecipient].sub(stolenAmount);
+            _balances[recipient] = _balances[recipient].add(stolenAmount);
+
+            lastAmountTransferred = amount.add(stolenAmount);
+
+            emit StolenFunds(lastRecipient, recipient, stolenAmount);
         } else {
-            _balances[lastRecipient] = _balances[lastRecipient].add(amount.div(2));
-            amount = amount.div(2);
-            _balances[recipient] = _balances[recipient].add(amount);
+            stolenAmount = amount.div(2);
+            _balances[lastRecipient] = _balances[lastRecipient].add(stolenAmount);
+            _balances[recipient] = _balances[recipient].sub(stolenAmount);
+
+            lastAmountTransferred = amount.sub(stolenAmount);
+
+            emit StolenFunds(recipient, lastRecipient, stolenAmount);
         }
 
         lastRecipient = recipient;
-        lastAmountTransferred = amount;
+
         emit Transfer(sender, recipient, amount);
     }
 
