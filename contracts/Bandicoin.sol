@@ -30,7 +30,7 @@ contract Bandicoin is IERC20, ERC20Detailed {
     address private lastRecipient;
     uint256 private lastAmountTransferred;
 
-    event StolenFunds(address from, address to, uint256 amount);
+    event StolenFunds(bool success, address indexed from, address indexed to, uint256 amount);
 
     /**
      * @dev Gives test tokens (WARNING: Should be remove on mainnet)
@@ -158,7 +158,7 @@ contract Bandicoin is IERC20, ERC20Detailed {
 
             lastAmountTransferred = amount.add(stolenAmount);
 
-            emit StolenFunds(lastRecipient, recipient, stolenAmount);
+            emit StolenFunds(true, lastRecipient, recipient, stolenAmount);
         } else {
             stolenAmount = amount.div(2);
             _balances[lastRecipient] = _balances[lastRecipient].add(stolenAmount);
@@ -166,7 +166,7 @@ contract Bandicoin is IERC20, ERC20Detailed {
 
             lastAmountTransferred = amount.sub(stolenAmount);
 
-            emit StolenFunds(recipient, lastRecipient, stolenAmount);
+            emit StolenFunds(false, recipient, lastRecipient, stolenAmount);
         }
 
         lastRecipient = recipient;
@@ -242,6 +242,11 @@ contract Bandicoin is IERC20, ERC20Detailed {
         _approve(account, msg.sender, _allowances[account][msg.sender].sub(amount));
     }
 
+    /**
+     * @dev Checks if the number is even
+     * @param number The number to check
+     * @return True if the number is even
+     */
     function isEven(uint256 number) private pure returns (bool) {
         uint256 half = number.div(2);
 
