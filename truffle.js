@@ -1,5 +1,6 @@
 require('dotenv').config();
 const HDWalletProvider = require('truffle-hdwallet-provider');
+const PrivateKeyProvider = require('truffle-privatekey-provider');
 const Utils = require('web3-utils');
 
 const mainnetUrl = `https://mainnet.infura.io/v3/${process.env.INFURA}`;
@@ -20,9 +21,7 @@ module.exports = {
       gasPrice: Utils.toWei('2', 'gwei'),
     },
     ropsten: {
-      provider() {
-        return new HDWalletProvider(process.env.MNEMONIC, ropstenUrl, 0);
-      },
+      provider: new PrivateKeyProvider(process.env.PRIVATE_KEY, ropstenUrl),
       network_id: 3,
       gasPrice: Utils.toWei('2', 'gwei'),
       gas: 8000000,
