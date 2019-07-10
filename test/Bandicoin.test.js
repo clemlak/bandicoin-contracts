@@ -1,5 +1,5 @@
 /* eslint-env node, mocha */
-/* global artifacts, contract, it, assert */
+/* global artifacts, contract, assert, web3 */
 
 const Bandicoin = artifacts.require('Bandicoin');
 
@@ -49,5 +49,5 @@ contract('Bandicoin', (accounts) => {
   it('Should check the balance of address 0x0', () => bandicoin.balanceOf('0x0000000000000000000000000000000000000000')
     .then((balance) => {
       assert.equal(web3.utils.fromWei(balance), 0.5, 'Address 0x0 balance is wrong');
-    }));  
+    }));
 });
