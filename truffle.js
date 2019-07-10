@@ -1,15 +1,9 @@
 require('dotenv').config();
-const HDWalletProvider = require('truffle-hdwallet-provider');
 const PrivateKeyProvider = require('truffle-privatekey-provider');
 const Utils = require('web3-utils');
 
 const mainnetUrl = `https://mainnet.infura.io/v3/${process.env.INFURA}`;
 const ropstenUrl = `https://ropsten.infura.io/v3/${process.env.INFURA}`;
-const rinkebyUrl = `https://rinkeby.infura.io/v3/${process.env.INFURA}`;
-const kovanUrl = `https://kovan.infura.io/v3/${process.env.INFURA}`;
-const goerliUrl = `https://goerli.infura.io/v3/${process.env.INFURA}`;
-const poaUrl = 'http://poa.network';
-const sokolUrl = 'http://sokol.poa.network';
 
 module.exports = {
   networks: {
@@ -18,61 +12,20 @@ module.exports = {
       port: 8545,
       network_id: '*',
       gas: 4000000,
-      gasPrice: Utils.toWei('2', 'gwei'),
+      gasPrice: Utils.toWei('10', 'gwei'),
     },
     ropsten: {
       provider: new PrivateKeyProvider(process.env.PRIVATE_KEY, ropstenUrl),
       network_id: 3,
-      gasPrice: Utils.toWei('2', 'gwei'),
-      gas: 8000000,
-    },
-    rinkeby: {
-      provider() {
-        return new HDWalletProvider(process.env.MNEMONIC, rinkebyUrl, 0);
-      },
-      network_id: 4,
-      gasPrice: Utils.toWei('2', 'gwei'),
-      gas: 7000000,
-    },
-    kovan: {
-      provider() {
-        return new HDWalletProvider(process.env.MNEMONIC, kovanUrl, 0);
-      },
-      network_id: 42,
-      gasPrice: Utils.toWei('2', 'gwei'),
-      gas: 8000000,
-    },
-    goerli: {
-      provider() {
-        return new HDWalletProvider(process.env.MNEMONIC, goerliUrl, 0);
-      },
-      network_id: '*',
-      gasPrice: Utils.toWei('2', 'gwei'),
-      gas: 8000000,
-    },
-    sokol: {
-      provider() {
-        return new HDWalletProvider(process.env.MNEMONIC, sokolUrl, 0);
-      },
-      network_id: '*',
-      gasPrice: Utils.toWei('2', 'gwei'),
-      gas: 8000000,
-    },
-    poa: {
-      provider() {
-        return new HDWalletProvider(process.env.MNEMONIC, poaUrl, 0);
-      },
-      network_id: '*',
-      gasPrice: Utils.toWei('2', 'gwei'),
-      gas: 8000000,
+      gasPrice: Utils.toWei('10', 'gwei'),
+      gas: 4000000,
+      skipDryRun: true,
     },
     live: {
-      provider() {
-        return new HDWalletProvider(process.env.MNEMONIC, mainnetUrl, 0);
-      },
+      provider: new PrivateKeyProvider(process.env.PRIVATE_KEY, mainnetUrl),
       network_id: 1,
-      gasPrice: Utils.toWei('2', 'gwei'),
-      gas: 8000000,
+      gasPrice: Utils.toWei('10', 'gwei'),
+      gas: 4000000,
     },
   },
   mocha: {
