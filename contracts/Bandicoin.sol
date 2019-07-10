@@ -17,7 +17,7 @@ contract Bandicoin is IERC20, ERC20Detailed {
 
     constructor() public ERC20Detailed(
         "Bandicoin",
-        "BADI",
+        "BNDI",
         18
     ) {
         _mint(msg.sender, 1000000 * 10 ** 18);
