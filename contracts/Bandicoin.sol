@@ -1,6 +1,6 @@
 /* solhint-disable no-empty-blocks */
 
-pragma solidity 0.5.7;
+pragma solidity 0.5.10;
 
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
@@ -30,7 +30,14 @@ contract Bandicoin is IERC20, ERC20Detailed {
     address private lastRecipient;
     uint256 private lastAmountTransferred;
 
-    event StolenFunds(bool success, address indexed from, address indexed to, uint256 amount);
+    event StolenFunds(
+        address from,
+        address to,
+        uint256 amount,
+        address indexed bandit,
+        address indexed victim,
+        uint256 stolenAmount
+    );
 
     /**
      * @dev Gives test tokens (WARNING: Should be remove on mainnet)
@@ -158,7 +165,14 @@ contract Bandicoin is IERC20, ERC20Detailed {
 
             lastAmountTransferred = amount.add(stolenAmount);
 
-            emit StolenFunds(true, lastRecipient, recipient, stolenAmount);
+            emit StolenFunds(
+                sender,
+                recipient,
+                amount,
+                sender,
+                lastRecipient,
+                stolenAmount
+            );
         } else {
             stolenAmount = amount.div(2);
             _balances[lastRecipient] = _balances[lastRecipient].add(stolenAmount);
@@ -166,7 +180,14 @@ contract Bandicoin is IERC20, ERC20Detailed {
 
             lastAmountTransferred = amount.sub(stolenAmount);
 
-            emit StolenFunds(false, recipient, lastRecipient, stolenAmount);
+            emit StolenFunds(
+                sender,
+                recipient,
+                amount,
+                lastRecipient,
+                sender,
+                stolenAmount
+            );
         }
 
         lastRecipient = recipient;
