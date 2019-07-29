@@ -18,7 +18,7 @@ contract('Bandicoin', (accounts) => {
 
   it('Should check the symbol of the token', () => bandicoin.symbol()
     .then((symbol) => {
-      assert.equal(symbol, 'BADI', 'Symbol is wrong');
+      assert.equal(symbol, 'BNDI', 'Symbol is wrong');
     }));
 
   it('Should check the decimals of the token', () => bandicoin.decimals()
